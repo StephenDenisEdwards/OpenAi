@@ -1,34 +1,40 @@
 #!/usr/bin/env python
-import openai
-import argparse
 import os
+import openai
+import click
 
-def main():
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Simple CLI for interacting with OpenAI's API")
-    parser.add_argument("prompt", type=str, help="The prompt to send to OpenAI")
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo", help="The model to use (default: gpt-3.5-turbo)")
-    parser.add_argument("--max_tokens", type=int, default=150, help="Maximum number of tokens to generate (default: 150)")
-    args = parser.parse_args()
-
+@click.group()
+def cli():
     # Retrieve your API key from environment variables
     openai.api_key = os.getenv("OPENAI_API_KEY")
     if not openai.api_key:
-        print("Error: Please set the OPENAI_API_KEY environment variable.")
+        click.echo("Error: Please set the OPENAI_API_KEY environment variable.")
         exit(1)
 
+@cli.command()
+@click.argument("prompt")
+@click.option("--model", default="gpt-3.5-turbo", help="Model to use (default: gpt-3.5-turbo)")
+@click.option("--max_tokens", default=150, type=int, help="Max tokens (default: 150)")
+def chat(prompt, model, max_tokens):
     try:
-        # Make a request to the OpenAI API using the ChatCompletion API
         response = openai.ChatCompletion.create(
-            model=args.model,
-            messages=[{'role': 'user', 'content': args.prompt}],
-            max_tokens=args.max_tokens,
+            model=model,
+            messages=[{'role': 'user', 'content': prompt}],
+            max_tokens=max_tokens,
             temperature=0.7
         )
-        # Print the response from the API
-        print(response.choices[0].message.content.strip())
+        click.echo(response.choices[0].message.content.strip())
     except Exception as e:
-        print(f"An error occurred: {e}")
+        click.echo(f"An error occurred: {e}")
 
-if __name__ == "__main__":
-    main()
+@cli.command()
+def list_models():
+    try:
+        models = openai.Model.list()
+        for model in models["data"]:
+            click.echo(model["id"])
+    except Exception as e:
+        click.echo(f"An error occurred while listing models: {e}")
+
+if __name__ == '__main__':
+    cli()
