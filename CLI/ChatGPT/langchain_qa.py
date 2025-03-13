@@ -8,6 +8,8 @@ from langchain.chains import ConversationalRetrievalChain
 
 def main():
     print("Current working directory:", os.getcwd())  # Debug: show current working directory
+    print("API Key", os.getenv("OPENAI_API_KEY"))
+
     # Load all documents from the "data" directory
     loader = DirectoryLoader("data")
     persist_dir = "persist"
@@ -19,8 +21,13 @@ def main():
     index = index_creator.from_loaders([loader])
     
     # Set up the conversational retrieval chain
+
+    model_name = "gpt-4o"
+
+    print("Model:", model_name)
+
     qa_chain = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(model_name="gpt-3.5-turbo"),
+        ChatOpenAI(model_name=model_name),
         retriever=index.vectorstore.as_retriever(search_kwargs={"k": 1})
     )
     
