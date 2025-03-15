@@ -4,6 +4,12 @@ import torch
 import clip
 from PIL import Image
 import os
+import pickle  # New import
+
+# OpenMP Conflict (libomp140.x86_64.dll vs libiomp5md.dll)
+# This happens because multiple OpenMP versions are being loaded, often due to conflicting installs of FAISS, PyTorch, and NumPy.
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 # Step 1: Load Images and Extract Embeddings
 # We use OpenAI’s CLIP model to generate 512-dimensional embeddings for images.
@@ -14,39 +20,62 @@ model, preprocess = clip.load("ViT-B/32", device=device)
 
 # Directory containing images
 image_folder = "images_dataset"
-image_files = [f for f in os.listdir(image_folder) if f.endswith((".jpg", ".png", ".jpeg"))]
+image_files = []
+for root, dirs, files in os.walk(image_folder):
+    for f in files:
+        if f.lower().endswith((".jpg", ".png", ".jpeg")):
+            image_files.append(os.path.join(root, f))
+
+# Persistence file paths
+persist_index_path = "persisted_index.faiss"
+persist_info_path = "persist_data.pkl"
 
 # Function to compute image embeddings
 def get_image_embedding(image_path):
+    print("Processing: ", image_path)
     image = Image.open(image_path).convert("RGB")
     image = preprocess(image).unsqueeze(0).to(device)  # Preprocess and batchify
     with torch.no_grad():
         embedding = model.encode_image(image)
     return embedding.cpu().numpy()
 
-# Compute embeddings for all images
-image_embeddings = np.array([get_image_embedding(os.path.join(image_folder, img)) for img in image_files])
-image_embeddings = image_embeddings.reshape(len(image_files), -1).astype(np.float32)  # Flatten
+if os.path.exists(persist_index_path) and os.path.exists(persist_info_path):
+    # Persisted data found. Load the FAISS index and image map.
+    print("Persisted data found. Loading index and image information...")
+    index = faiss.read_index(persist_index_path)
+    with open(persist_info_path, "rb") as f:
+        image_index_map = pickle.load(f)
+else:
+    # No persisted data. Process images and perform training.
 
-# Store image file names with indices
-image_index_map = {i: image_files[i] for i in range(len(image_files))}
+    # Compute embeddings for all images
+    # image_embeddings = np.array([get_image_embedding(os.path.join(image_folder, img)) for img in image_files])
+    image_embeddings = np.array([get_image_embedding(img) for img in image_files])
+    image_embeddings = image_embeddings.reshape(len(image_files), -1).astype(np.float32)  # Flatten
 
+    # Store image file names with indices
+    image_index_map = {i: image_files[i] for i in range(len(image_files))}
 
-# Step 2: Indexing in FAISS (Approximate Nearest Neighbor)
-# We use FAISS’s IndexIVFFlat, which speeds up search by clustering vectors.
+    # Step 2: Indexing in FAISS (Approximate Nearest Neighbor)
+    # We use FAISS’s IndexIVFFlat, which speeds up search by clustering vectors.
 
-# FAISS settings
-d = image_embeddings.shape[1]  # Dimensionality (512 for CLIP)
-nlist = 5  # Number of clusters (adjustable for performance)
-nprobe = 2  # Number of clusters to search (higher = more accurate)
+    # FAISS settings
+    d = image_embeddings.shape[1]  # Dimensionality (512 for CLIP)
+    nlist = 5  # Number of clusters (adjustable for performance)
+    nprobe = 2  # Number of clusters to search (higher = more accurate)
 
-# Create FAISS index with clustering (ANN)
-quantizer = faiss.IndexFlatL2(d)  # Base index for clustering
-index = faiss.IndexIVFFlat(quantizer, d, nlist, faiss.METRIC_L2)
+    # Create FAISS index with clustering (ANN)
+    quantizer = faiss.IndexFlatL2(d)  # Base index for clustering
+    index = faiss.IndexIVFFlat(quantizer, d, nlist, faiss.METRIC_L2)
 
-# Train the FAISS index (needed for IVFFlat)
-index.train(image_embeddings)
-index.add(image_embeddings)  # Add vectors to FAISS
+    # Train the FAISS index (needed for IVFFlat)
+    index.train(image_embeddings)
+    index.add(image_embeddings)  # Add vectors to FAISS
+
+    # Persist trained data to disk
+    faiss.write_index(index, persist_index_path)
+    with open(persist_info_path, "wb") as f:
+        pickle.dump(image_index_map, f)
 
 # Step 3: Search for Similar Images
 # To find similar images, extract an embedding for a query image and search in FAISS.
@@ -62,5 +91,7 @@ def search_similar_images(query_image_path, k=3):
         print(f"Match {i+1}: {image_index_map[idx]} (Distance: {distances[0][i]:.4f})")
 
 # Example: Search for similar images
-query_image = "query.jpg"  # Replace with your query image
-search_similar_images(query_image)
+# query_image = "query_dog.jpg"
+# query_image = "query_dog.jpg"
+query_image = "query_dog.jpg"
+search_similar_images(query_image, 10)
