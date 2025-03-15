@@ -92,6 +92,7 @@ def search_similar_images(query_image_path, k=3):
 
 # Example: Search for similar images
 # query_image = "query_dog.jpg"
+# query_image = "query_car.jpg"
 # query_image = "query_dog.jpg"
-query_image = "query_dog.jpg"
+query_image = "query_airplane.jpg"
 search_similar_images(query_image, 10)
