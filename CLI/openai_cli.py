@@ -32,7 +32,11 @@ def list_models():
     try:
         models = openai.Model.list()
         for model in models["data"]:
-            click.echo(model["id"])
+            # Show additional details if available
+            model_id = model.get("id", "N/A")
+            owned_by = model.get("owned_by", "N/A")
+            description = model.get("description", "N/A")  # new line to retrieve model description
+            click.echo(f"ID: {model_id} | Owned by: {owned_by} | Description: {description}")
     except Exception as e:
         click.echo(f"An error occurred while listing models: {e}")
 
