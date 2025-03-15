@@ -125,3 +125,74 @@ Match 3: porsche.jpeg (Distance: 0.1351)
 * **Hybrid Search** : Combine FAISS with  **metadata filters (like Elasticsearch)** .
 
 Would you like to see **an ANN-optimized version** of this for  **millions of images** ? 🚀
+
+
+# Great question! The **Text-to-Image Search Using FAISS and CLIP** works **without labels** because **CLIP (Contrastive Language-Image Pretraining)** learns a **shared embedding space** for both images and text.
+
+### **How Does CLIP Enable Text Search Without Labels?**
+
+1. **Pretrained Vision-Language Model** :
+
+* **CLIP** has been trained on  **millions of image-text pairs** .
+* It learns  **associations between images and textual descriptions** .
+* The model understands **semantic meaning** without explicit labels.
+
+1. **Image Embeddings (Vector Representation of Images)** :
+
+* Each image is converted into a **512-dimensional vector** (using `model.encode_image`).
+* These embeddings capture  **features like colors, objects, and scene types** .
+* The images are  **indexed in FAISS** , which enables  **fast similarity search** .
+
+1. **Text Query as a Vector** :
+
+* When you input a **text query** (e.g.,  *"a red sports car"* ), CLIP converts it into a  **512-dimensional vector** .
+* The model **understands the query’s meaning** even though images were not pre-labeled.
+
+1. **Similarity Search** in FAISS:
+   * FAISS **compares the text query embedding** to the indexed image embeddings.
+   * It **retrieves the most similar images** based on  **vector distance (cosine similarity or L2 norm)** .
+
+---
+
+### **Why Does This Work Without Labels?**
+
+* **CLIP does not need explicit image labels** like "dog" or "car".
+* Instead, it **generalizes meaning** based on learned image-text pairs.
+* It recognizes **visual features** that match textual descriptions.
+
+---
+
+### **Example Breakdown**
+
+#### **Step 1: Encoding and Indexing Images**
+
+```python
+# Encode images (512D vector)
+image_embeddings = model.encode_image(images)
+index.add(image_embeddings)  # Store in FAISS
+```
+
+* Each image is stored **without labels** but represented as a  **vector** .
+
+#### **Step 2: Encoding and Searching a Text Query**
+
+```python
+query_text = "a red sports car"
+query_embedding = model.encode_text(clip.tokenize([query_text]).to(device))
+
+# Search for similar images
+distances, indices = index.search(query_embedding.cpu().numpy(), k=3)
+```
+
+* **CLIP understands the text** and converts it into an  **embedding** .
+* FAISS finds the  **closest image vectors** .
+
+---
+
+### **Summary**
+
+* No need for  **manual labels** —CLIP already understands  **semantic meaning** .
+* Text queries work by  **comparing vector embeddings** , not pre-defined labels.
+* FAISS efficiently retrieves  **similar images based on learned features** .
+
+Would you like a **visual example** or **step-by-step debugging guide** to better understand how embeddings are matched? 🚀

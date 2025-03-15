@@ -27,8 +27,8 @@ for root, dirs, files in os.walk(image_folder):
             image_files.append(os.path.join(root, f))
 
 # Persistence file paths
-persist_index_path = "persisted_index.faiss"
-persist_info_path = "persist_data.pkl"
+persist_index_path = "search_similarity_index.faiss"
+persist_info_path = "search_similarity_data.pkl"
 
 # Function to compute image embeddings
 def get_image_embedding(image_path):
