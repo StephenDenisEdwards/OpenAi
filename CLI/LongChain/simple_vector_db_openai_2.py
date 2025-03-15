@@ -31,12 +31,16 @@ vector_store = FAISS.from_documents(chunks, embeddings)
 
 # Search for similar results
 query = "What is LangChain?"
-query_embedding = embeddings.embed_query(query)
-results = vector_store.similarity_search_by_vector(query_embedding, k=3)
+# Remove the query embedding usage for this sample search
+# query_embedding = embeddings.embed_query(query)
+# Replace similarity_search_by_vector with similarity_search_with_relevance_scores
+results_with_scores = vector_store.similarity_search_with_relevance_scores(query, k=3)
 
 print("-------------------------------------------------------------\n")
-for res in results:
-    print("\n🤖 Vector DB: ", res.page_content, "\n")
+print("Result of similarity search with rank & similarity (Vector DB)\n")
+for idx, (doc, score) in enumerate(results_with_scores, start=1):
+    print(f"\nRank {idx} 🤖 Vector DB: {doc.page_content}\nSimilarity: {score}\n")
+print("-------------------------------------------------------------\n")
 
 # Add in the LLM into the mix
 
@@ -52,6 +56,7 @@ qa_chain = ConversationalRetrievalChain.from_llm(
 
 response = qa_chain.run({"question": query})
 print("-------------------------------------------------------------\n")
+print("Result of the same search with the Vector DB passed to the LLM.\n")
 print("\n🤖 AI: ", response, "\n")
 print("-------------------------------------------------------------\n")
 
