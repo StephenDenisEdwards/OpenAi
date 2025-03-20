@@ -4,6 +4,8 @@ import torch
 import clip
 from PIL import Image
 import os
+import tkinter as tk
+from PIL import ImageTk, Image
 import pickle  # New import
 
 # OpenMP Conflict (libomp140.x86_64.dll vs libiomp5md.dll)
@@ -87,9 +89,50 @@ def search_similar_images(query_image_path, k=3):
     # Perform search in FAISS
     distances, indices = index.search(query_embedding, k)
     
-    print(f"\nQuery Image: {query_image_path}\n")
+    # Create a pop-up window to display the results
+    window = tk.Tk()
+    window.title("Search Results")
+    
+    # Load and prepare the query image
+    query_img = Image.open(query_image_path)
+    query_img.thumbnail((400, 400))
+    query_photo = ImageTk.PhotoImage(query_img)
+    
+    # Display the query image at the top
+    label_query = tk.Label(window, image=query_photo)
+    label_query.image = query_photo  # Keep a reference
+    label_query.pack(pady=10)
+    
+    # Create a frame for the results text and thumbnails
+    results_frame = tk.Frame(window)
+    results_frame.pack(padx=10, pady=10)
+    
+    # Display query file path
+    tk.Label(results_frame, text=f"Query Image: {query_image_path}", font=("Arial", 14, "bold")).pack(anchor="w")
+    
+    # Display each match with its score and thumbnail image
     for i, idx in enumerate(indices[0]):
-        print(f"    Match {i+1}: {image_index_map[idx]} (Score: {distances[0][i]:.4f})")
+        # Create a frame for each result
+        result_frame = tk.Frame(results_frame)
+        result_frame.pack(anchor="w", pady=5)
+        
+        # Load result image and create thumbnail
+        result_img_path = image_index_map[idx]
+        result_img = Image.open(result_img_path)
+        result_img.thumbnail((100, 100))
+        result_photo = ImageTk.PhotoImage(result_img)
+        
+        # Display thumbnail
+        thumb_label = tk.Label(result_frame, image=result_photo)
+        thumb_label.image = result_photo  # keep a reference
+        thumb_label.pack(side="left", padx=5)
+        
+        # Display match text
+        result_text = f"Match {i+1}: {result_img_path} (Score: {distances[0][i]:.4f})"
+        text_label = tk.Label(result_frame, text=result_text, font=("Arial", 12))
+        text_label.pack(side="left", padx=5)
+    
+    window.mainloop()
 
 
 # Example: Search for similar images
