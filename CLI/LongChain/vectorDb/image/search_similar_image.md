@@ -130,3 +130,7 @@ Match 3: image9.jpg (Distance: 0.1351)
 ```
 
 Would you like an example with **text-to-image search** using CLIP as well? 🚀
+
+# ViT-B/32
+
+ViT-B/32 is a variant of the Vision Transformer model used by OpenAI’s CLIP. "B" stands for "Base" (a moderate-sized model), and "32" indicates that the input image is divided into 32×32 pixel patches before processing.
