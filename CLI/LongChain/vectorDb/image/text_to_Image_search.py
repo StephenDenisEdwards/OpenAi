@@ -94,6 +94,8 @@ def search_by_text(query_text, k=3):
     from PIL import ImageTk
     root = tk.Tk()
     root.title("Search Results")
+    root.focus_force()  # Bring window into focus
+    root.bind("<space>", lambda event: root.destroy())  # Close window on spacebar press
     
     # List of selected image paths
     selected_paths = [image_index_map[idx] for idx in indices[0]]
