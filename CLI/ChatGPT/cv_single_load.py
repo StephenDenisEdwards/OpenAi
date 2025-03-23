@@ -16,6 +16,10 @@ file_path = os.path.join(current_dir, "data", "Stephen Edwards CV December 2024.
 loader = UnstructuredFileLoader(file_path)
 documents = loader.load()
 
+# Add candidate name to metadata for each document
+for doc in documents:
+    doc.metadata["candidate_name"] = "Stephen Edwards"
+
 # Split the document into smaller chunks
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
 chunks = text_splitter.split_documents(documents)
@@ -26,3 +30,7 @@ vector_store = FAISS.from_documents(chunks, embeddings)
 
 # Save vector store
 vector_store.save_local("cv_faiss_index")
+
+# Example query with metadata filtering to ensure correct candidate:
+# results = vector_store.similarity_search("your query here", filter={"candidate_name": "Stephen Edwards"})
+# print(results)

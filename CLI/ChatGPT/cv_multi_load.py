@@ -27,7 +27,7 @@ for filename in os.listdir(cv_directory):
         documents = loader.load()
 
         for doc in documents:
-            doc.metadata = {"type": "cv", "name": candidate_name}
+            doc.metadata = {"type": "cv", "candidate name": candidate_name}
             documents_with_metadata.append(doc)
 if(False):
     # Load .ics Calendar Files
