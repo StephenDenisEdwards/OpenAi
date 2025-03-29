@@ -15,7 +15,7 @@ prompt = "Write a Python class for a binary tree."
 # Generate text from the model
 response = client.text_generation(
     prompt=prompt,
-    max_new_tokens=150,
+    max_new_tokens=250,
     temperature=0.7,
     top_p=0.9
 )
