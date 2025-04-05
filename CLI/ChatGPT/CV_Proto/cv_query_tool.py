@@ -2,6 +2,7 @@ import os
 import openai
 import docx
 import json
+import docx2txt
 from pathlib import Path
 from typing import List, Dict
 from tqdm import tqdm
@@ -25,18 +26,8 @@ def get_embedding(text: str, model: str = "text-embedding-3-small") -> List[floa
 
 # Load and parse CVs from DOCX files
 def extract_text_from_docx(file_path: Path) -> str:
-    doc = docx.Document(file_path)
-    paragraphs = [para.text for para in doc.paragraphs if para.text.strip()]
-
-    tables = []
-    for table in doc.tables:
-        for row in table.rows:
-            row_text = [cell.text.strip() for cell in row.cells if cell.text.strip()]
-            if row_text:
-                tables.append(" | ".join(row_text))
-
-    all_text = paragraphs + tables
-    return "\n".join(all_text)
+    text = docx2txt.process(str(file_path))
+    return text
 
 # Load all CVs from a directory
 def load_cvs_from_directory(directory: Path) -> List[Dict]:
@@ -61,6 +52,10 @@ def load_cv_data(file: Path) -> List[Dict]:
 
 # Ask a question about the CVs
 def ask_question(cvs: List[Dict], query: str):
+
+        # Create overall information string
+    overall_info = f"Total number of CVs loaded: {len(cvs)}.\nFiles: " + ", ".join([cv['filename'] for cv in cvs])
+ 
     query_embedding = get_embedding(query, model=EMBEDDING_MODEL)
     ranked = sorted(
         cvs,
@@ -70,7 +65,11 @@ def ask_question(cvs: List[Dict], query: str):
     top_cv = ranked[0]
 
     # Feed into GPT for summarised answer
-    context = f"""You are a recruiter. Here is a candidate's CV:
+
+    context = f"""You are a recruiter.
+Overall information:
+{overall_info}.
+Here is a candidate's CV:
 {top_cv['text']}
 Based on the CV, answer the following question:
 {query}
@@ -84,7 +83,7 @@ Based on the CV, answer the following question:
 
 # Compare two CVs
 def compare_cvs(cv1: Dict, cv2: Dict):
-    prompt = f"""Compare the following two CVs and highlight the differences in skills, experience, and education.
+    prompt = f"""Compare the following two CVs and highlight the differences in skills, experience, and education. Provide reasoning.
 
 CV 1 ({cv1['filename']}):
 {cv1['text']}
@@ -129,6 +128,10 @@ if __name__ == "__main__":
     while True:
         cmd = input("\nEnter a command (ask / ask_specific / compare / list / exit): ").strip().lower()
         if cmd == "ask":
+            # Sample prompts    
+            # determine who has the most experience in C# programming. Provide a reasoned answer.
+            # who has the most C# experience
+
             question = input("Enter your question: ")
             ask_question(cvs, question)
         elif cmd == "ask_specific":
