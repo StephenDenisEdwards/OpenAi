@@ -1,4 +1,3 @@
-
 # Question 1 - General Compare
 
 Ask a question (or 'exit'): compare the CVs of Stephen Edwards and Jim Taliadoros highlighting techincal strenghts and weaknesses
@@ -36,9 +35,7 @@ From an overall perspective, Jim Taliadoros shows strengths in versatile full st
 
 ## Ask a question (or 'exit'): which candidate would suit the following position best:
 
-C# .NETCore, Python, Angular, Azure, Kubernetes, M
-icroservices - Senior Developer. Front Office and Risk, Commodities Trading. London.Ink Search are currently working with one of the front running firms in the UK & Asian Commodities Trading markets. With a large, multi £M investment and an exciting greenfield programme, they are redesigning and developing their Front Office, valuations, pricing and pre-trade analytics systems estate and creating
- a complex, cutting edge, multi-stream FO commodities trading technology ecosystem from scratch. As part of the programme they are recruiting a Senior FO Developer to work on the design and development of the Front Office LNG "Trader Workbench". The successful candidate will be involved in solution design, analysis and hands on software development for the creation of a best in class trading technology environment.Essential skills:Proficiency in Python and the .NET ecosystem, demonstrating in-depth expertise in:Event-driven architecture and data processing, utilizing frameworks such as Azure Event Hubs or Apache Kafka.Developing, deploying, and maintaining microservices, with a strong understanding of RESTful APIs and gRPC.Implementing database solutions, with a preference for experience in both relational databases like SQL Server and NoSQL databases like MongoDB or CosmosDB.Advanced debugging and troubleshooting skills, including performance optimisation and monitoring.Familiarity with a range of software development tools, such as source code management (eg Azure DevOps, Git), build and release management (eg Azure DevOps Pipelines) and test automation (eg unit testing tools, BDD tools like Cucumber/Gherkin)Familiarity with at least one type of DB technology (SQL Server, Mongo DB etc)Experience working on multiple projects as a Software Engineer within a multi-disciplinary team, being proactive in taking ownership your deliverables, while collaborating across the team, following the direction set by technical and delivery leadsFamiliarity with the mechanics of financial markets, preferably with a focus on Front Office commodities.This is an excellent opportunity to work on a modern, greenfield programme, right at the forefront of the market. The client will interview and hire based on a 2 stage interview with no upfront technical test. The vacancy is inside IR35, offering 12 months+ work, based in Central London with hybrid 2 days office/3 days home work pattern.
+    
 
 Answer:
 Given the specific requirements of the Senior Developer position in Front Office and Risk for Commodities Trading as detailed in the job post, Jim Taliadoros appears to be the most suitable candidate for the following reasons:
@@ -50,7 +47,6 @@ Given the specific requirements of the Senior Developer position in Front Office
 5. **Hands-on Development and Leadership**: The role requires a proactive senior developer capable of taking charge of deliverables and this is evidenced multiple times in Jim’s career where he has led development efforts and driven projects to successful completion in agile environments.
 
 In summary, Jim Taliadoros demonstrates a strong fit not only through his technical skills but also via his practical experience in financial and front office environments, his familiarity with the required architectural patterns and technologies, and a proven track record in similar roles. This blend makes him an ideal candidate for the Senior Developer position at a leading commodities trading firm in London.
-
 
 Ask a question (or 'exit'): which candidate would suit the following position best:C# .NETCore, Python, Angular, Azure, Kubernetes, M
 icroservices - Senior Developer. Front Office and Risk, Commodities Trading. London.Ink Search are currently working with one of the front running firms in the UK & Asian Commodities Trading markets. With a large, multi £M investment and an exciting greenfield programme, they are redesigning and developing their Front Office, valuations, pricing and pre-trade analytics systems estate and creating
@@ -90,10 +86,6 @@ Jim’s background in critically compliant banking environments and his direct e
 
 In conclusion, Jim Taliadoros is recommended for the role of .Net/C# Developer at the consultancy, given his relevant technical expertise and experience in similar high-standard and regulation-heavy environments.
 
-
-
-
-
 ## Ask a question (or 'exit'): which candidate would suit the following position best:
 
 Software Engineer - REST-ful APIs, Python, (C#) Energy TradingShape the Future of Scalable Cloud Solutions in the Energy Trading Industry!Are you a passionate Software Engineer ready to take on complex challenges and build scalable, high-performance cloud solutions? Do you thrive in an agile environment where you can push the boundaries of technology and innovation? If so, we want YOU!Immediate Start Inside IR35 Contract until the end of 2025 with extensions, for two years' worth of work2 video call interviews and then a job offerHybrid working 2 days in central LondonWhy Join?Work on cutting-edge cloud-based solutions that have a real impact.Collaborate with forward-thinking engineers, architects, and business leaders.A dynamic, agile work environment where your ideas matter.Competitive salary, flexible working arrangements, and opportunities for career growth.As a Software Engineer, you'll be at the heart of our technology team, driving innovation and delivering robust, scalable solutions. You'll work closely with technical and business stakeholders, helping to shape and implement our vision within the energy trading industry.What You'll Be Doing:Partner with technical and business teams to gather and refine requirements.Design and document scalable solutions in collaboration with Solution Architects.Translate the Product Manager's vision into tangible, working software.Identify risks and dependencies, proposing smart mitigation strategies.Build and test REST-ful API services primarily in Python (C# is a plus!).Implement automated testing across all levels (unit, integration, end-to-end, performance).Work extensively with Azure technologies: Entra ID, AKS, Front Door, SQL Server, Cosmos DB, Service Bus, and more.Design and implement secure authentication using OIDC, OAuth 2.0, JWTs.What You Bring to the Team:Must-Have Technical Skills:Experience designing and building scalable cloud-based systems.Strong Python development skills (C# is a bonus but not mandatory).Experience with message buses/queues for event-driven architectures.Proficiency in Azure cloud services.Solid knowledge of authentication and security best practices.Nice-to-Have Technical Skills:Experience integrating complex systems.Kubernetes, Kafka, Terraform, GitHub Actions, Open Telemetry (OTEL).Data science libraries (Numpy, Pandas).Soft Skills That Set You Apart:Agile mindset - we use Scrum, and you should love working iteratively.A bold thinker who challenges assumptions and asks tough questions.A strong communicator who can translate technical concepts for non-technical stakeholders.A natural problem-solver who thrives in ambiguity and adapts to change.A passion for continuous delivery and shipping fully-tested software in small increments.Bonus Points for Domain Knowledge In:Commodity trading (gas & power).Quantitative finance.Compliance & regulation (SOx).
@@ -117,3 +109,43 @@ Based on the job description and requirements for the Software Engineer position
 
 **Final Recommendation:**
 While Jim Taliadoros has a strong background, especially in finance and banking, Stephen Edwards’ specific experiences with Python, C#, Azure technologies, and the energy sector make him potentially more impactful in the role. His familiarity with the technology stack required, coupled with industry experience in energy, aligns closely with the job requirements, making him the more suitable candidate for this position.
+
+# Problem Job Posting
+
+When using this job posting the model doesn't seem to be able to identify
+
+Location: Hybrid/Onsite - Leuven - Belgium
+Full-time | Financial Sector | Senior-Level
+
+**About the Role:**
+
+Are you a seasoned .NET developer with a passion for clean CI/CD pipelines, modern cloud tooling, and enterprise-grade engineering? our client is looking for a Senior .NET Software Engineer to join our .NET Competence Center, helping them evolve and optimise their software factory setup using Azure DevOps, GitHub Enterprise Cloud, and Azure PaaS services.
+
+This is a hands-on, impact-driven role where you'll build, maintain, and support reusable components, deployment pipelines, and infrastructure tools that power over 100 internal applications across the financial clients diverse domains - from insurance to asset management.
+
+**What You'll Do:**
+
+* Own and manage the CI/CD ecosystem across Azure DevOps and GitHub Actions
+* Develop and maintain build & release pipelines for .NET applications
+* Maintain and enhance Visual Studio templates, reference apps, and shared assets
+* Collaborate with development teams and the public cloud team on secure, scalable architecture
+* Maintain comprehensive internal documentation in Confluence
+* Act as a technical mentor and go-to expert for .NET DevOps practices
+
+**Must-Have:**
+
+* Solid experience with .NET 8+, C#, SQL Server, REST APIs, Clean Architecture
+* Deep knowledge of Azure DevOps, GitHub Actions, CI/CD design
+* Fluent in Git, YAML, NuGet, Npm
+* Hands-on with Azure PaaS: App Service, Functions, Storage, KeyVault, AAD, etc.
+* Infrastructure-as-Code skills using BICEP or ARM templates
+* Strong documentation and communication skills (Dutch & English)
+
+**Nice-to-Have:**
+
+* Certifications: AZ-204, AZ-400
+* Familiarity with SonarQube, Nexus, or Mend
+* Experience in SAFe Agile environments
+* Background in the financial or highly regulated sectors
+
+Location: Hybrid/Onsite - Leuven - BelgiumFull-time | Financial Sector | Senior-Level**About the Role:**Are you a seasoned .NET developer with a passion for clean CI/CD pipelines, modern cloud tooling, and enterprise-grade engineering? our client is looking for a Senior .NET Software Engineer to join our .NET Competence Center, helping them evolve and optimise their software factory setup using Azure DevOps, GitHub Enterprise Cloud, and Azure PaaS services.This is a hands-on, impact-driven role where you'll build, maintain, and support reusable components, deployment pipelines, and infrastructure tools that power over 100 internal applications across the financial clients diverse domains - from insurance to asset management.**What You'll Do:*** Own and manage the CI/CD ecosystem across Azure DevOps and GitHub Actions* Develop and maintain build & release pipelines for .NET applications* Maintain and enhance Visual Studio templates, reference apps, and shared assets* Collaborate with development teams and the public cloud team on secure, scalable architecture* Maintain comprehensive internal documentation in Confluence* Act as a technical mentor and go-to expert for .NET DevOps practices**Must-Have:*** Solid experience with .NET 8+, C#, SQL Server, REST APIs, Clean Architecture* Deep knowledge of Azure DevOps, GitHub Actions, CI/CD design* Fluent in Git, YAML, NuGet, Npm* Hands-on with Azure PaaS: App Service, Functions, Storage, KeyVault, AAD, etc.* Infrastructure-as-Code skills using BICEP or ARM templates* Strong documentation and communication skills (Dutch & English)**Nice-to-Have:*** Certifications: AZ-204, AZ-400* Familiarity with SonarQube, Nexus, or Mend* Experience in SAFe Agile environments* Background in the financial or highly regulated sectors
