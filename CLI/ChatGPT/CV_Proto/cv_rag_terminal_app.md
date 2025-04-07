@@ -35,8 +35,6 @@ From an overall perspective, Jim Taliadoros shows strengths in versatile full st
 
 ## Ask a question (or 'exit'): which candidate would suit the following position best:
 
-    
-
 Answer:
 Given the specific requirements of the Senior Developer position in Front Office and Risk for Commodities Trading as detailed in the job post, Jim Taliadoros appears to be the most suitable candidate for the following reasons:
 
@@ -115,9 +113,9 @@ While Jim Taliadoros has a strong background, especially in finance and banking,
 When using this job posting the model doesn't seem to be able to identify
 
 Location: Hybrid/Onsite - Leuven - Belgium
-Full-time | Financial Sector | Senior-Level
+Full-time | Financial Sector | Senior-Level	
 
-**About the Role:**
+**About the Role:	**
 
 Are you a seasoned .NET developer with a passion for clean CI/CD pipelines, modern cloud tooling, and enterprise-grade engineering? our client is looking for a Senior .NET Software Engineer to join our .NET Competence Center, helping them evolve and optimise their software factory setup using Azure DevOps, GitHub Enterprise Cloud, and Azure PaaS services.
 
@@ -147,5 +145,3 @@ This is a hands-on, impact-driven role where you'll build, maintain, and support
 * Familiarity with SonarQube, Nexus, or Mend
 * Experience in SAFe Agile environments
 * Background in the financial or highly regulated sectors
-
-Location: Hybrid/Onsite - Leuven - BelgiumFull-time | Financial Sector | Senior-Level**About the Role:**Are you a seasoned .NET developer with a passion for clean CI/CD pipelines, modern cloud tooling, and enterprise-grade engineering? our client is looking for a Senior .NET Software Engineer to join our .NET Competence Center, helping them evolve and optimise their software factory setup using Azure DevOps, GitHub Enterprise Cloud, and Azure PaaS services.This is a hands-on, impact-driven role where you'll build, maintain, and support reusable components, deployment pipelines, and infrastructure tools that power over 100 internal applications across the financial clients diverse domains - from insurance to asset management.**What You'll Do:*** Own and manage the CI/CD ecosystem across Azure DevOps and GitHub Actions* Develop and maintain build & release pipelines for .NET applications* Maintain and enhance Visual Studio templates, reference apps, and shared assets* Collaborate with development teams and the public cloud team on secure, scalable architecture* Maintain comprehensive internal documentation in Confluence* Act as a technical mentor and go-to expert for .NET DevOps practices**Must-Have:*** Solid experience with .NET 8+, C#, SQL Server, REST APIs, Clean Architecture* Deep knowledge of Azure DevOps, GitHub Actions, CI/CD design* Fluent in Git, YAML, NuGet, Npm* Hands-on with Azure PaaS: App Service, Functions, Storage, KeyVault, AAD, etc.* Infrastructure-as-Code skills using BICEP or ARM templates* Strong documentation and communication skills (Dutch & English)**Nice-to-Have:*** Certifications: AZ-204, AZ-400* Familiarity with SonarQube, Nexus, or Mend* Experience in SAFe Agile environments* Background in the financial or highly regulated sectors

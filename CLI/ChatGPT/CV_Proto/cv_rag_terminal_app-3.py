@@ -7,6 +7,7 @@ from pathlib import Path
 from docx import Document
 from typing import List
 from openai.embeddings_utils import get_embedding
+import PyPDF2  # new import for PDF processing
 
 # Set your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -18,6 +19,14 @@ def extract_text_from_docx(file_path: str) -> str:
 # Load and parse CVs from DOCX files
 def extract_text_from_docx_using_docx2txt(file_path: Path) -> str:
     text = docx2txt.process(str(file_path))
+    return text
+
+def extract_text_from_pdf(file_path: Path) -> str:
+    with open(file_path, "rb") as f:
+        reader = PyPDF2.PdfReader(f)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
     return text
 
 def chunk_text(text: str, max_tokens: int = 300) -> List[str]:
@@ -124,13 +133,23 @@ def answer_query(enhanced_query: str, query: str, chunks: List[str], embeddings:
 if __name__ == "__main__":
     base_dir = Path(__file__).parent.resolve()
     cv_dir = base_dir / "cvs"
-    # Load and process CVs
-    # jim_text = extract_text_from_docx(cv_dir / "Jim Taliadoros CV.docx")
-    # stephen_text = extract_text_from_docx(cv_dir / "Stephen Edwards CV.docx")
+    # Load and process all CVs (PDF and DOCX) in cv_dir
+    all_cv_texts = []
+    for cv_file in cv_dir.glob("*.*"):
 
-    jim_text =     extract_text_from_docx_using_docx2txt(cv_dir / "Jim Taliadoros CV.docx")
-    stephen_text =     extract_text_from_docx_using_docx2txt(cv_dir / "Stephen Edwards CV.docx")
-    combined_text = f"CV: Jim Taliadoros\n{jim_text}\n\nCV: Stephen Edwards\n{stephen_text}"
+        if cv_file.suffix.lower() == ".pdf":
+            text = extract_text_from_pdf(cv_file)
+        elif cv_file.suffix.lower() == ".docx":
+            text = extract_text_from_docx_using_docx2txt(cv_file)
+        else:
+            continue
+        candidate_name = cv_file.stem  # use file name as candidate name
+        
+        print(f"Processing {cv_file.name} for candidate: {candidate_name}")
+
+        all_cv_texts.append(f"CV: {candidate_name}\n{text}")
+    
+    combined_text = "\n\n".join(all_cv_texts)
 
     chunks = chunk_text(combined_text)
     print(f"Split into {len(chunks)} chunks. Generating embeddings...")
@@ -157,7 +176,8 @@ if __name__ == "__main__":
             #    The Explanation should contain your detailed bullet pointed reasoning.\n
             #"""
             query = f"Which candidate would suit the following position best: {job_posting}"
-            answer = answer_query(enhanced_query, query, chunks, embeddings)
+            # answer = answer_query(enhanced_query, query, chunks, embeddings)
+            answer = answer_query(enhanced_query, query, chunks, embeddings, 10)
             print(f"\nComparison Result:\n{answer}\n")
             continue
         query = choice
