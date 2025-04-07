@@ -8,6 +8,7 @@ from docx import Document
 from typing import List
 from openai.embeddings_utils import get_embedding
 import PyPDF2  # new import for PDF processing
+import pickle   # added import for pickle
 
 # Set your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -100,8 +101,8 @@ def answer_query(enhanced_query: str, query: str, chunks: List[str],
         ]
     )
     return response["choices"][0]["message"]["content"]
-def answer_query(enhanced_query: str, query: str, chunks: List[str], embeddings: np.ndarray, top_k: int = 3) -> str:
-    query_embedding = get_embedding(enhanced_query + query, engine="text-embedding-3-small")
+def answer_query(query: str, chunks: List[str], embeddings: np.ndarray, top_k: int = 3) -> str:
+    query_embedding = get_embedding(query, engine="text-embedding-3-small")
     index = faiss.IndexFlatL2(embeddings.shape[1])
     index.add(embeddings)
     _, indices = index.search(np.array([query_embedding]), top_k)
@@ -133,64 +134,53 @@ def answer_query(enhanced_query: str, query: str, chunks: List[str], embeddings:
 if __name__ == "__main__":
     base_dir = Path(__file__).parent.resolve()
     cv_dir = base_dir / "cvs"
-    # Load and process all CVs (PDF and DOCX) in cv_dir
-    all_cv_texts = []
-    for cv_file in cv_dir.glob("*.*"):
-
-        if cv_file.suffix.lower() == ".pdf":
-            text = extract_text_from_pdf(cv_file)
-        elif cv_file.suffix.lower() == ".docx":
-            text = extract_text_from_docx_using_docx2txt(cv_file)
-        else:
-            continue
-        candidate_name = cv_file.stem  # use file name as candidate name
-        
-        print(f"Processing {cv_file.name} for candidate: {candidate_name}")
-
-        all_cv_texts.append(f"CV: {candidate_name}\n{text}")
+    data_file = base_dir / "cv_rag_terminal_app-3.pkl"
     
-    combined_text = "\n\n".join(all_cv_texts)
-
-    chunks = chunk_text(combined_text)
-    print(f"Split into {len(chunks)} chunks. Generating embeddings...")
-
-    embeddings = embed_chunks(chunks)
-    print("Embeddings generated. Ready to answer questions.")
-
-    # Sample prompts    
-    # determine who has the most experience in C# programming. Provide a reasoned answer.
-    # who has the most C# experience
-
+    regenerate = input("Regenerate embeddings? (y/n): ").strip().lower()
+    if regenerate == "y" or not data_file.exists():
+        all_cv_texts = []
+        for cv_file in cv_dir.glob("*.*"):
+            if cv_file.suffix.lower() == ".pdf":
+                text = extract_text_from_pdf(cv_file)
+            elif cv_file.suffix.lower() == ".docx":
+                text = extract_text_from_docx_using_docx2txt(cv_file)
+            else:
+                continue
+            candidate_name = cv_file.stem  # use file name as candidate name
+            print(f"Processing {cv_file.name} for candidate: {candidate_name}")
+            all_cv_texts.append(f"CV: {candidate_name}\n{text}")
+        combined_text = "\n\n".join(all_cv_texts)
+        chunks = chunk_text(combined_text)
+        print(f"Split into {len(chunks)} chunks. Generating embeddings...")
+        embeddings = embed_chunks(chunks)
+        print("Embeddings generated. Saving to file...")
+        with open(data_file, "wb") as f:
+            pickle.dump({'chunks': chunks, 'embeddings': embeddings}, f)
+    else:
+        with open(data_file, "rb") as f:
+            data = pickle.load(f)
+        chunks = data["chunks"]
+        embeddings = data["embeddings"]
+        print("Loaded saved embeddings. Ready to answer questions.")
+    
     while True:
-        choice = input("Enter 'j' to add a job posting or type your search query: ")
+        choice = input("Enter 'j' to add a job posting, 'c' for cover letter or type your search query: ")
+        if choice.lower() == "c":
+            candidate_name = input("Please enter the candidate name: ")
+            job_posting = input("Please enter the job posting text: ")
+            query = f"Write a covering letter based on {candidate_name} CV and the following position: {job_posting}"
+            answer = answer_query(query, chunks, embeddings, 10)
+            print(f"\nCover letter:\n{answer}\n")
+            continue
         if choice.lower() == "j":
             job_posting = input("Please enter the job posting text: ")
-            enhanced_query = """
-            """
-            # Prepend detailed instruction to always include the candidate's name
-            #enhanced_query = """
-            #    Answer in the following format without deviation:\n
-            #    Candidate: [Candidate Name]\n
-            #    Explanation: [Your explanation].\n
-            #    If you cannot identify a candidate, put 'Unknown' as the name and provide your reasoning.\n
-            #    The Explanation should contain your detailed bullet pointed reasoning.\n
-            #"""
             query = f"Which candidate would suit the following position best: {job_posting}"
-            # answer = answer_query(enhanced_query, query, chunks, embeddings)
-            answer = answer_query(enhanced_query, query, chunks, embeddings, 10)
+            answer = answer_query( query, chunks, embeddings, 10)
             print(f"\nComparison Result:\n{answer}\n")
             continue
         query = choice
         if query.lower() in ("exit", "quit"):
             break
         print(f"\nQuery:\n{query}\n")
-            # Prepend detailed instruction to always include the candidate's name
-        enhanced_query = """" \
-        """
-        # enhanced_query = (
-        #        "Candidate: [Candidate Name]\n"
-        #        "Explanation: [Your explanation].\n"
-        #        "The Explanation should contain your detailed bullet pointed reasoning.\n"
-        #    )
-        answer = answer_query(enhanced_query, query, chunks, embeddings)
+        answer = answer_query(query, chunks, embeddings)
         print(f"\nAnswer:\n{answer}\n")
